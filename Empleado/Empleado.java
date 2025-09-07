@@ -22,6 +22,7 @@ public class Empleado{
   // key word final para declarar una constante
   // Politica: cada retardo descuenta 0.25 horas o 15 minutos
   private final float penalizacionRetardos = 0.25f;
+  // Bonos establecidos como constantes por politicas de la empresa
   private final float bonoPuntualidad = 230.23f;
   private final float bonoProductividad = 530.42f;
 
@@ -59,6 +60,10 @@ public class Empleado{
 
   public void setRetardos(int retardos){
     this.retardos = retardos;
+  }
+  
+  public String getNombre(){
+    return nombre;
   }
 
   public float calcularSalarioBruto(){
@@ -128,4 +133,5 @@ public class Empleado{
     System.out.printf("Desc. por retardos: %.2f\n", calcularDescuentoPorRetardos());
     System.out.printf("Bonos: %.2f\n", calcularBonos());
     System.out.printf("Salario neto: %.2f\n", calcularSalarioNeto());
-}}
+  }
+}

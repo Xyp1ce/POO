@@ -12,6 +12,7 @@ public class Dados{
   public int getCara(){
     return caraVisible;
   }
+
   public void setAleatorio(){
      caraVisible = generador.nextInt(6) + 1;
   }

@@ -27,6 +27,10 @@ public class Cuenta{
     System.out.println("El saldo es: " + saldo + "$");
   }
 
+  public void getFechaVencimiento(){
+    System.out.println("La fecha de vencimiento es: " + fechaVencimiento);
+  }
+
   public void renovar(String fechaVencimiento){
     // La palabra clave "this" nos permite diferenciar el alcance de una variable
     // en caso que el nombre del atributo sea igual al del parametro.
@@ -34,14 +38,12 @@ public class Cuenta{
     // (los que estan situados hasta arriba)
     this.fechaVencimiento = fechaVencimiento;
   }
-
   public float depositar(float deposito){
     return saldo+=deposito;
   }
 
   public float retirar(float retiro){
     if((saldo - retiro) < 0){
-      System.out.println("Operacion no exitosa... fondos insuficientes");
       return 0;
     } else{
       return saldo-=retiro;

@@ -20,13 +20,14 @@ public class Cliente{
     System.out.println("Ingresa el numero de cuenta");
     long noCuenta = sc.nextLong();
     sc.nextLine();
-    System.out.println("Ingresa la clave");
+    System.out.println("Ingresa la CLABE");
     long clave = sc.nextLong();
     sc.nextLine();
     System.out.println("Ingresa la fecha de vencimiento");
     String fechaVencimiento = sc.nextLine();
     System.out.println("Ingresa el tipo");
     String tipo = sc.nextLine();
+
     // Llamado a metodo Constructor
     Cuenta cuenta = new Cuenta(noCuenta, clave, fechaVencimiento, tipo);
 
@@ -35,6 +36,7 @@ public class Cliente{
       System.out.println("[1] Retirar           [4] Consultar fecha de vencimiento");
       System.out.println("[2] Depostitar        [5] Consultar saldo");
       System.out.println("[3] Renovar           [6] Salir");
+      System.out.println("                      [7] Consultar informacion");
       opc = sc.nextInt();
       sc.nextLine();
 
@@ -43,6 +45,12 @@ public class Cliente{
           System.out.println("Ingrese la cantidad a retirar ");
           float retiro = sc.nextFloat();
           sc.nextLine();
+          while(retiro < 0){
+            System.out.println("Cantidad invalida...");
+            System.out.println("Ingrese la cantidad a retirar ");
+            retiro = sc.nextFloat();
+            sc.nextLine();
+          }
           if(cuenta.retirar(retiro) == 0){
             System.out.println("Operacion no exitosa... fondos insuficientes");
           } else {
@@ -53,6 +61,12 @@ public class Cliente{
           System.out.println("Ingrese la cantidad a depositar ");
           float deposito = sc.nextFloat();
           sc.nextLine();
+          while(deposito < 0){
+            System.out.println("Cantidad invalido...");
+            System.out.println("Ingrese la cantidad a depositar ");
+            deposito = sc.nextFloat();
+            sc.nextLine();
+          }
           cuenta.depositar(deposito);
           System.out.println("Operacion exitosa");
           break;
@@ -62,13 +76,16 @@ public class Cliente{
           cuenta.renovar(fechaVencimiento);
           break;
         case 4: // getFechaVencimiento 
-          cuenta.getFechaVencimiento();
+          System.out.println("La fecha de vencimiento es: " + cuenta.getFechaVencimiento());
           break;
         case 5: // Consultar saldo tarjeta
-          cuenta.getSaldo();
+          System.out.println("El saldo es: " + cuenta.getSaldo());;
           break;
         case 6: // Salir
           System.out.println("Terminando programa...");
+          break;
+        case 7:
+          System.out.println(cuenta);
           break;
         default: 
           System.out.println("Opcion invalida...");

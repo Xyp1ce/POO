@@ -22,13 +22,30 @@ public class Cuenta{
     saldo = 0;
   }
 
-  // Metodos
-  public void getSaldo(){
-    System.out.println("El saldo es: " + saldo + "$");
+  @Override
+  public String toString(){
+    return "\nCuenta " + noCuenta + "\n" + "\nSaldo: " + saldo + "\nCLABE: " + clave + "\nTipo: " + tipo + "\n";
   }
 
-  public void getFechaVencimiento(){
-    System.out.println("La fecha de vencimiento es: " + fechaVencimiento);
+  // Metodos
+  public long getNoCuenta(){
+    return noCuenta;
+  }
+  
+  public float getSaldo(){
+    return saldo;
+  }
+  
+  public long getClave(){
+    return clave;
+  }
+
+  public String getFechaVencimiento(){
+    return fechaVencimiento;
+  }
+
+  public String getTipo(){
+    return tipo;
   }
 
   public void renovar(String fechaVencimiento){

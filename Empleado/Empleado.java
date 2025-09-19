@@ -22,7 +22,7 @@ public class Empleado{
   // key word final para declarar una constante
   // Politica: cada retardo descuenta 0.25 horas o 15 minutos
   private final float penalizacionRetardos = 0.25f;
-  // Bonos establecidos como constantes por politicas de la empresa
+  // Bonos establecidos como constantes por politicas de la emprsa
   private final float bonoPuntualidad = 230.23f;
   private final float bonoProductividad = 530.42f;
 
@@ -33,7 +33,7 @@ public class Empleado{
     this.nombre = nombre;
     this.puesto = puesto;
     this.salario = salario; // el salario es por hora
- 
+
     // Estos atributos se modificaran, por lo que no es necesario
     // asignarles un valor
     salarioBruto = 0;
@@ -45,6 +45,51 @@ public class Empleado{
     metaEstablecida = false;
   }
 
+  public Empleado() { // Constructor vacio
+    this.nombre = null;
+    this.puesto = null;
+    this.salario = 0.0f;
+    this.salarioBruto = 0.0f;
+    this.impuestos = 0.0f;
+    this.horasTrabajadas = 0;
+    this.horasFaltadas = 0;
+    this.retardos = 0;
+    this.descuentos = 0.0f;
+    this.metaEstablecida = false;
+  }
+
+  public Empleado(String nombre, String puesto, float salario, int horasTrabajadas, int retardos) {
+    // Constructor con
+    // nombre, salario, horasTrabajadas y retardos
+    this.nombre = nombre;
+    this.puesto = puesto;
+    this.salario = salario;
+    this.horasTrabajadas = horasTrabajadas;
+    this.retardos = retardos;
+
+    // Inicializamos lo demás
+    this.salarioBruto = 0.0f;
+    this.impuestos = 0.0f;
+    this.horasFaltadas = 0;
+    this.descuentos = 0.0f;
+    this.metaEstablecida = false;
+  }
+
+  @Override
+  public String toString() {
+    return "Empleado: " + nombre + " (" + puesto + ")\n" +
+      "Horas trabajadas: " + horasTrabajadas + "\n" +
+      "Horas faltadas: " + horasFaltadas + " | Retardos: " + retardos + "\n" +
+      String.format("Pago horas extra: %.2f\n", calcularPagoHorasExtras()) +
+      String.format("Salario bruto: %.2f\n", calcularSalarioBruto()) +
+      String.format("Impuestos: %.2f\n", calcularImpuestos()) +
+      String.format("Desc. por faltas: %.2f\n", calcularDescuentoPorFaltas()) +
+      String.format("Desc. por retardos: %.2f\n", calcularDescuentoPorRetardos()) +
+      String.format("Bonos: %.2f\n", calcularBonos()) +
+      String.format("Salario neto: %.2f\n", calcularSalarioNeto()) +
+      "\n";
+  }
+
   // Metodos
   public void setHorasTrabajados(int horasTrabajadas){
     this.horasTrabajadas = horasTrabajadas;
@@ -53,7 +98,7 @@ public class Empleado{
   public void setHorasFaltadas(int horasFaltadas){
     this.horasFaltadas = horasFaltadas;
   }
-  
+
   public void setMetaEstablecida(boolean metaEstablecida){
     this.metaEstablecida = metaEstablecida;
   }
@@ -61,7 +106,11 @@ public class Empleado{
   public void setRetardos(int retardos){
     this.retardos = retardos;
   }
-  
+
+  public int getHorasTrabajadas(){
+    return horasTrabajadas;
+  }
+
   public String getNombre(){
     return nombre;
   }
@@ -91,7 +140,7 @@ public class Empleado{
     impuestos = salarioBruto * 0.16f;
     return impuestos;
   }
-  
+
   public float calcularDescuentoPorFaltas(){
     return salario * horasFaltadas;
   }
@@ -119,19 +168,10 @@ public class Empleado{
     float descRetardos = calcularDescuentoPorRetardos();
     float bonos = calcularBonos();
     descuentos = descFaltas + descRetardos; // total de descuentos
-    return bruto - imp - descuentos + bonos;
-  }
-
-  public void mostrarInfo() {
-    System.out.println("Empleado: " + nombre + " (" + puesto + ")");
-    System.out.println("Horas trabajadas: " + horasTrabajadas);
-    System.out.println("Horas faltadas: " + horasFaltadas + " | Retardos: " + retardos);
-    System.out.printf("Pago horas extra: %.2f\n", calcularPagoHorasExtras());
-    System.out.printf("Salario bruto: %.2f\n", calcularSalarioBruto());
-    System.out.printf("Impuestos: %.2f\n", calcularImpuestos());
-    System.out.printf("Desc. por faltas: %.2f\n", calcularDescuentoPorFaltas());
-    System.out.printf("Desc. por retardos: %.2f\n", calcularDescuentoPorRetardos());
-    System.out.printf("Bonos: %.2f\n", calcularBonos());
-    System.out.printf("Salario neto: %.2f\n", calcularSalarioNeto());
+    float neto = bruto - imp - descuentos + bonos;
+    if(neto < 0)
+      return 0;
+    else 
+      return neto;
   }
 }

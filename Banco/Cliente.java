@@ -1,4 +1,6 @@
 public class Cliente{
+
+  // Atributos
   private int noCliente;
   private String nombre;
   private String direccion;
@@ -40,5 +42,21 @@ public class Cliente{
 
   public void addCuenta(long noCuenta, long clave, String fechaVencimiento, String tipo){
     cuentas[indice++] = new Cuenta(noCuenta, clave, fechaVencimiento, tipo);
+  }
+
+  public void verCuentas() { // Impresion de todas las cuentas de un cliente
+    for(int i = 0; i < indice; i++) { 
+      // Llamamos al toString de Cuenta
+      System.out.println(cuentas[i]);
+    }
+  }
+
+  public Cuenta buscarCuenta(long noCuenta) {
+    for(int i = 0; i < indice; i++) {
+      if(cuentas[i].getNoCuenta() == noCuenta) {
+        return cuentas[i];
+      }
+    }
+    return null; // no lo encontro
   }
 }

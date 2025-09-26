@@ -16,7 +16,7 @@ public class Principal {
   private final float salarioMinimo = 52.48f;
 
   public static void main(String[] args) {
-    Principal p = new Principal();
+    Principal p = new P rincipal();
     p.menu();
   }
 

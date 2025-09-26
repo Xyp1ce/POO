@@ -22,18 +22,14 @@ public class Cliente {
     }
 
     // Setters 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
     // agrega un pedido ya creado
-    public void addPedido(Pedido pedido) {
+    public void addPedido(String fecha, int noPedido) {
         if (indice < pedidos.length) {
-            pedidos[indice++] = pedido;
+            pedidos[indice++] = new Pedido(fecha, noPedido);
         } else {
             System.out.println("No se pueden agregar más pedidos para este cliente.");
         }

@@ -2,14 +2,8 @@ import java.util.Scanner;
 
 public class Principal {
     public Scanner sc = new Scanner(System.in);
-    // Lista general de productos disponibles
-    private Producto[] productos;
-    private int indice;
-
-    public Principal() {
-        productos = new Producto[100];
-        indice = 0;
-    }
+    // Almacen de prodctos
+    Almacen almacen = new Almacen();
 
     public static void main(String[] args) {
         Principal p = new Principal();
@@ -54,14 +48,10 @@ public class Principal {
             sc.nextLine();
             switch (opc) {
                 case 1: // Agregar producto
-                    if (indice < productos.length) {
-                        productos[indice++] = agregarProducto();
-                    } else {
-                        System.out.println("No se pueden agregar más productos.");
-                    }
+                    agregarProducto();
                     break;
                 case 2: // Modificar producto
-                    modificarProducto(productos);
+                    modificarProducto();
                     break;
                 case 3: // Salir
                     System.out.println("Saliendo del modo administrador...");
@@ -97,7 +87,7 @@ public class Principal {
         } while (opc != 2);
     }
 
-    public Producto agregarProducto() {
+    public void agregarProducto() {
         String nombre;
         String tipo;
         double precio;
@@ -108,31 +98,30 @@ public class Principal {
         sc.nextLine();
         System.out.println("Ingresa el tipo del producto");
         tipo = sc.nextLine();
-        return new Producto(nombre, precio, tipo);
+        if(almacen.addProducto(nombre, precio, tipo) == 1) 
+            System.out.println("Producto agregado exitosamente\n\n");
+        else
+            System.out.println("No se pudo agregar el producto. Almacen lleno\n\n");
     }
 
     // Metodo para modificar el producto que el administrador quiera
-    public void modificarProducto(Producto[] productos) {
+    public void modificarProducto() {
         int opc;
         String nombre;
         String tipo;
         double precio;
+        
+        almacen.verProductos();
         System.out.println("Ingresa el nombre del producto a modificar");
         nombre = sc.nextLine();
-        Producto producto = null;
-        for (int i = 0; i < indice; i++) {
-            if (productos[i] != null && productos[i].getNombre().equals(nombre)) {
-                producto = productos[i];
-                break;
-            }
-        }
+        Producto producto = almacen.buscarProducto(nombre);
         if (producto == null) {
             System.out.println("Producto no encontrado.");
             return;
         }
         do {
             System.out.println("\nQue quieres modificar del producto " + producto.getNombre() + "\n" +
-                    "[1] Nombre  [2] Precio  [3] Tipo  [4] Cancelar");
+                    "[1] Nombre  [2] Precio  [3] Tipo  [4] Ver informacion  [5] Cancelar");
             opc = sc.nextInt();
             sc.nextLine();
             switch (opc) {
@@ -152,22 +141,17 @@ public class Principal {
                     tipo = sc.nextLine();
                     producto.setTipo(tipo);
                     break;
-                case 4: // Cancelar
+                case 4: // Ver informacion 
+                    System.out.println("\n" + producto + "\n");
+                    break;
+                case 5: // Cancelar
                     System.out.println("Cancelando...");
                     break;
                 default:
                     System.out.println("Opcion invalida...");
                     break;
             }
-        } while (opc != 4);
-    }
-
-    // método para ver todos los productos disponibles
-    public void verProductos(Producto[] productos) {
-        for (int i = 0; i < productos.length; i++) {
-            if (productos[i] == null) break;
-            System.out.println((i + 1) + " -> " + productos[i]);
-        }
+        } while (opc != 5);
     }
 
     // metodo para realizar un pedido y agregarlo al cliente
@@ -176,6 +160,7 @@ public class Principal {
         int eleccion;
         int noPedido;
         String fecha;
+
         System.out.println("Ingresa la fecha del pedido: ");
         fecha = sc.nextLine();
         System.out.println("Numero de pedido: ");
@@ -189,23 +174,23 @@ public class Principal {
             opc = sc.nextInt();
             sc.nextLine();
             if (opc == 1) {
-                verProductos(productos);
+                almacen.verProductos();
                 System.out.println("Que producto desea agregar (numero):");
                 eleccion = sc.nextInt();
                 sc.nextLine();
-                while (eleccion > indice || eleccion < 1) {
+                while (eleccion > almacen.getCantidad() || eleccion < 1) {
                     System.out.println("Opcion invalida");
-                    verProductos(productos);
+                    almacen.verProductos();
                     System.out.println("Que producto desea agregar (numero):");
                     eleccion = sc.nextInt();
                     sc.nextLine();
                 }
-                pedido.addProducto(productos[eleccion - 1]);
+                pedido.addProducto(almacen.buscarProducto(eleccion));
             }
         } while (opc != 2);
         System.out.println("Saliendo...");
-        // agregar pedido al cliente
-        cliente.addPedido(pedido);
+        // Agregamos el pedido al cliente
+        cliente.addPedido(fecha, noPedido);
         return pedido;
     }
 }

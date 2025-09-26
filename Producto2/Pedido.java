@@ -44,6 +44,7 @@ public class Pedido {
         this.numeroPedido = numeroPedido;
     }
 
+    // Agregar un producto ya existente
     public void addProducto(Producto producto) {
         if (indice < productos.length) {
             productos[indice++] = producto;

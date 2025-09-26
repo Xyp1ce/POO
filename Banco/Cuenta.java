@@ -1,4 +1,5 @@
 public class Cuenta{
+
   // Atributos
   private long noCuenta;
   private float saldo;
@@ -50,6 +51,9 @@ public class Cuenta{
     this.fechaVencimiento = fechaVencimiento;
   }
   public float depositar(float deposito){
+    if(deposito <= 0) {
+      return 0;
+    }
     return saldo+=deposito;
   }
 

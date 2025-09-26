@@ -1,4 +1,6 @@
 public class Sucursal{
+
+  // Atributos
   private String direccion;
   private int noSucursal;
 
@@ -38,12 +40,12 @@ public class Sucursal{
   }
 
   public void addCliente(String nombre, String direccion) {
-    clientes[indice++] = new Cliente((indice+1), nombre, direccion);
+    clientes[indice++] = new Cliente((indice), nombre, direccion);
   }
 
   public void getClientes() {
     for(int i = 0; clientes[i] != null; i++) {
-      System.out.println(clientes[i].toString());
+      System.out.println(clientes[i].toString() + "\n");
     }
   }
 }

@@ -42,8 +42,8 @@ public class Cliente{
     this.direccion = direccion;
   }
 
-  public void addCuenta(long noCuenta, long clave, String fechaVencimiento, String tipo){
-    cuentas[indice++] = new Cuenta(noCuenta, clave, fechaVencimiento, tipo);
+  public void addAccount(Cuenta account) {
+    cuentas[indice++] = account;
   }
 
   public void verCuentas() { // Impresion de todas las cuentas de un cliente
@@ -74,7 +74,7 @@ public class Cliente{
   }
 
   class Telefono {
-    pirvate String tipo;
+    private String tipo;
     private String numero;
 
     public Telefono(String tipo, String numero) {

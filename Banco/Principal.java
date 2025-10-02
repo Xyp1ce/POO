@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Principal{
   public Scanner sc = new Scanner(System.in);
   public static void main(String[] args){
+    Cuenta.setInteres(10.5f);
     Principal p = new Principal();
     p.menu();
   }
@@ -19,11 +20,11 @@ public class Principal{
     String nombre;
     Cuenta cuenta;
     do {
-      System.out.println("\n[1] Agregar Cliente [4] Ver Cuentas Cliente\n" +
-                         "[2] Ver Clientes    [5] Realizar transaccion\n" +
-                         "[3] Agregar Cuenta  [6] Salir\n");
-      opc = sc.nextInt();
-      sc.nextLine();
+      System.out.println("\n[1] Agregar Cliente     [5] Realizar transaccion\n" +
+                         "[2] Ver Clientes        [6] Cambiar interes\n" +
+                         "[3] Agregar Cuenta      [7] Ver Cuentas sucursal\n" +
+                         "[4] Ver Cuentas Cliente [8] Salir");
+      opc = Validacion.validInt("Ingresa una opcion: ");
       switch(opc) {
         case 1: // agregar Clientes
           if(sucursal.getCantidad() == 9) {
@@ -58,7 +59,7 @@ public class Principal{
           do { // Escoger opcion
             System.out.println("[1] Deposito [3] Seleccionar Cuenta\n" +
                                "[2] Retiro   [4] Cancelar\n");
-            opc = sc.nextInt();
+            opc = Validacion.validInt("Ingresa una opcion: ");
             sc.nextLine();
             switch(opc) {
               case 1: // Deposito
@@ -82,13 +83,20 @@ public class Principal{
             }
           } while(opc != 4);
           break;
-        case 6: // Salir
+        case 6: // Cambiar interes
+          cambiarInteres();
+          break;
+        case 7: // Ver cuentas sucursal 
+          sucursal.watchAccounts();
+          break;
+        case 8: // Salir
           System.out.println("Finalizando programa...\n");
           break;
         default:
+          System.out.println("Opcion Invalida...\n");
           break;
       }
-    } while(opc != 6); 
+    } while(opc != 8); 
   }
 
   public Sucursal crearSucursal() {
@@ -122,7 +130,15 @@ public class Principal{
       String fechaVencimiento = sc.nextLine();
       System.out.println("Ingresa el tipo de la cuenta");
       String tipo = sc.nextLine();
-      cliente.addCuenta(noCuenta, clave, fechaVencimiento, tipo);
+
+      // Creamos un objeto Cuenta
+      Cuenta account = new Cuenta(noCuenta, clave, fechaVencimiento, tipo);
+      // Agregamos la cuenta al cliente y a la sucursal
+      cliente.addAccount(account);
+      sucursal.addAccount(account);
+      // Relacionamos el cliente a la cuenta
+      account.setClient(cliente);
+
     } else {
       System.out.println("No se encontro ningun cliente con ese nombre");
     }
@@ -192,5 +208,14 @@ public class Principal{
     } else {
       System.out.println("Saldo actualizado: " + cuenta.getSaldo());
     }
+  }
+
+  public void cambiarInteres() {
+    System.out.println("Interes actual: " + Cuenta.getInteres());
+    System.out.println("Ingrese el nuevo interes: ");
+    float interes = sc.nextFloat();
+    sc.nextLine();
+    Cuenta.setInteres(interes);
+    System.out.println("Interes actualizado: " + Cuenta.getInteres());
   }
 }

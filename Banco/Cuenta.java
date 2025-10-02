@@ -6,6 +6,7 @@ public class Cuenta{
   private long clave;
   private String fechaVencimiento;
   private String tipo;
+  private Cliente client;
 
   // Los metodos static se diferencian en que:
   // el valor se cambia para todos los objetos que existan de esta clase 
@@ -26,7 +27,7 @@ public class Cuenta{
 
   @Override
   public String toString(){
-    return "\nCuenta " + noCuenta + "\n" + "\nSaldo: " + saldo + "\nCLABE: " + clave + "\nTipo: " + tipo + "\n";
+    return "\nCliente " + client.getNombre() + "\n\nCuenta " + noCuenta + "\nSaldo: " + saldo + "\nCLABE: " + clave + "\nTipo: " + tipo + "\nInteres: " + interes;
   }
 
   // Metodos
@@ -48,6 +49,10 @@ public class Cuenta{
 
   public String getTipo(){
     return tipo;
+  }
+
+  public void setClient(Cliente client) {
+    this.client = client;
   }
 
   public void renovar(String fechaVencimiento){
@@ -76,9 +81,17 @@ public class Cuenta{
     return interes;
   }
 
-  // OJO: no podemos poner en el parametro el mismo nombre al 
-  // atributo interes que es static. Static no es un atributo del objeto 
-  // es un atributo de la clase
+  /*
+   * OJO: no podemos poner en el parametro el mismo nombre al
+   * atributo interes que es static. Static no es un atributo del objeto
+   * es un atributo de la clase
+   * Intentar hacer:
+   * public static void setInteres(float interes) {
+   * this.insteres = interes;
+   * }
+   * Resultaria en un error por lo anteriormente comentado
+   */ 
+  
   public static void setInteres(float inte) {
     interes = inte;
   }
@@ -86,4 +99,5 @@ public class Cuenta{
   public void calcularIntereses() {
     saldo+=(saldo*interes)/100;
   }
+
 }

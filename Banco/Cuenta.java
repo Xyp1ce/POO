@@ -7,6 +7,13 @@ public class Cuenta{
   private String fechaVencimiento;
   private String tipo;
 
+  // Los metodos static se diferencian en que:
+  // el valor se cambia para todos los objetos que existan de esta clase 
+  // aunque se tengan 2 objetos o mas, el valor, en este caso de interes, 
+  // interes sera el mismo para todas las clases, si se modifica en uno 
+  // se modifica en todos
+  private static float interes;
+
   // Constructor
   public Cuenta(long noCuenta, long clave, String fechaVencimiento, String tipo){
     this.noCuenta = noCuenta;
@@ -63,5 +70,20 @@ public class Cuenta{
     } else{
       return saldo-=retiro;
     }
+  }
+
+  public static float getInteres() {
+    return interes;
+  }
+
+  // OJO: no podemos poner en el parametro el mismo nombre al 
+  // atributo interes que es static. Static no es un atributo del objeto 
+  // es un atributo de la clase
+  public static void setInteres(float inte) {
+    interes = inte;
+  }
+
+  public void calcularIntereses() {
+    saldo+=(saldo*interes)/100;
   }
 }

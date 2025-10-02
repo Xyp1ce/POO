@@ -6,6 +6,8 @@ public class Cliente{
   private String direccion;
   private int indice;
   private Cuenta[] cuentas;
+  private Telefono[] telefonos;
+  private int cantTelefonos;
 
   // constructores
   public Cliente(int noCliente, String nombre, String direccion){
@@ -58,5 +60,34 @@ public class Cliente{
       }
     }
     return null; // no lo encontro
+  }
+
+  public void addTelefono(String tipo, String numero) {
+    telefonos[cantTelefonos++] = new Telefono(tipo, numero);
+  }
+
+  public void getTelefonos() {
+    for(int i = 0; i < cantTelefonos; i++) {
+      System.out.println((cantTelefonos+1) + ".-\n"+ "Numero: " + telefonos[i].getNumero() +
+                         "Tipo: " + telefonos[i].getTipo());
+    }
+  }
+
+  class Telefono {
+    pirvate String tipo;
+    private String numero;
+
+    public Telefono(String tipo, String numero) {
+      this.tipo = tipo;
+      this.numero = numero;
+    }
+
+    public String getTipo() {
+      return tipo;
+    }
+
+    public String getNumero() {
+      return numero;
+    }
   }
 }

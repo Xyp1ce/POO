@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Principal {
     public Scanner sc = new Scanner(System.in);
     // Almacen de prodctos
-    Almacen almacen = new Almacen();
+    // Almacen almacen = new Almacen();
 
     public static void main(String[] args) {
         Principal p = new Principal();
@@ -70,7 +70,7 @@ public class Principal {
         int opc;
         do {
             System.out.println("\nBienvenido " + cliente.getNombre() + "!!\n");
-            System.out.println("[1] Realizar Pedido\n[2] Salir");
+            System.out.println("[1] Realizar Pedido   [2] Ver pedidos   [3] Salir");
             opc = sc.nextInt();
             sc.nextLine();
             switch (opc) {
@@ -80,14 +80,19 @@ public class Principal {
                         System.out.println("Pedido creado: " + p);
                     }
                     break;
-                case 2: // Salir
+                case 2: // Ver pedidos
+                    if(cliente.verPedidos() == 0) {
+                        System.out.println("No hay pedidos\n");
+                    }
+                    break;
+                case 3: // Salir
                     System.out.println("Saliendo...");
                     break;
                 default:
                     System.out.println("Opcion invalida...");
                     break;
             }
-        } while (opc != 2);
+        } while (opc != 3);
     }
 
     public void agregarProducto() {
@@ -101,7 +106,7 @@ public class Principal {
         sc.nextLine();
         System.out.println("Ingresa el tipo del producto");
         tipo = sc.nextLine();
-        if(almacen.addProducto(nombre, precio, tipo) == 1) 
+        if(Almacen.addProducto(nombre, precio, tipo) == 1) 
             System.out.println("Producto agregado exitosamente\n\n");
         else
             System.out.println("No se pudo agregar el producto. Almacen lleno\n\n");
@@ -114,10 +119,10 @@ public class Principal {
         String tipo;
         double precio;
         
-        almacen.verProductos();
+        Almacen.verProductos();
         System.out.println("Ingresa el nombre del producto a modificar");
         nombre = sc.nextLine();
-        Producto producto = almacen.buscarProducto(nombre);
+        Producto producto = Almacen.buscarProducto(nombre);
         if (producto == null) {
             System.out.println("Producto no encontrado.");
             return;
@@ -186,23 +191,26 @@ public class Principal {
             opc = sc.nextInt();
             sc.nextLine();
             if (opc == 1) {
-                almacen.verProductos();
+                Almacen.verProductos();
                 System.out.println("Que producto desea agregar (numero):");
                 eleccion = sc.nextInt();
                 sc.nextLine();
-                while (eleccion > almacen.getCantidad() || eleccion < 1) {
+                while (eleccion > Almacen.getCantidad() || eleccion < 1) {
                     System.out.println("Opcion invalida");
-                    almacen.verProductos();
+                    Almacen.verProductos();
                     System.out.println("Que producto desea agregar (numero):");
                     eleccion = sc.nextInt();
                     sc.nextLine();
                 }
-                pedido.addProducto(almacen.buscarProducto(eleccion));
+                if(pedido.addProducto(Almacen.buscarProducto(eleccion)) == 1)
+                    System.out.println("Producto agregado\n");
+                else 
+                    System.out.println("No se pudo agregar el producto\n");
             }
         } while (opc != 2);
         System.out.println("Saliendo...");
         // Agregamos el pedido al cliente (guardamos el objeto con sus productos)
-        cliente.addPedido(fecha, noPedido);
+        cliente.addPedido(pedido);
         return pedido;
     }
 }

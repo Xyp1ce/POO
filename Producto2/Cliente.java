@@ -35,14 +35,23 @@ public class Cliente {
         }
     }
 
-    public void verPedidos() {
+    // agrega un pedido ya creado (sobrecarga que recibe el objeto Pedido con productos)
+    public void addPedido(Pedido pedido) {
+        if (indice < pedidos.length) {
+            pedidos[indice++] = pedido;
+        } else {
+            System.out.println("No se pueden agregar más pedidos para este cliente.");
+        }
+    }
+
+    public int verPedidos() {
         if (indice == 0) {
-            System.out.println("El cliente no tiene pedidos.");
-            return;
+            return 0;
         }
         System.out.println("Pedidos de " + nombre + ":");
         for (int i = 0; i < indice; i++) {
             System.out.println((i + 1) + " -> " + pedidos[i]);
         }
-    }
+        return 1;
+    }   
 }

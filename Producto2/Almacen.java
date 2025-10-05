@@ -1,24 +1,19 @@
 public class Almacen {
-    private Producto[] productos;
-    private int indice;
-
-    public Almacen() {
-        productos = new Producto[100];
-        indice = 0;
-    }
+    private static Producto[] productos = new Producto[100];
+    private static int indice = 0;
 
     // Getters
-    public int getCantidad() {
+    public static int getCantidad() {
         return (indice + 1);
     }
 
-    public void verProductos() {
+    public static void verProductos() {
         for(int i = 0; i < indice; i++) {
             System.out.println((i + 1) + ".\n" + productos[i]);
         }
     }
 
-    public int addProducto(String nombre, double precio, String tipo) {
+    public static int addProducto(String nombre, double precio, String tipo) {
         if(indice < 100) {
             productos[indice++] = new Producto(nombre, precio, tipo);
         } else { // No hay espacio
@@ -27,7 +22,7 @@ public class Almacen {
         return 1; // se completo la accion
     }
 
-    public Producto buscarProducto(String nombre) {
+    public static Producto buscarProducto(String nombre) {
         for (int i = 0; i < indice; i++) {
             if (productos[i].getNombre().equals(nombre)) {
                 return productos[i];
@@ -36,7 +31,7 @@ public class Almacen {
         return null; // No se encontró el producto
     }
 
-    public Producto buscarProducto(int eleccion) {
+    public static Producto buscarProducto(int eleccion) {
         return productos[eleccion - 1];
     }
 }

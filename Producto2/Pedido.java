@@ -23,11 +23,8 @@ public class Pedido {
     @Override
     public String toString() {
     double totalConIVA = total + (total * IVA);
-    return "Pedido{" +
-        "Numero=" + numeroPedido + '\n' +
-        "total=" + total + '\n' +
-        "total con IVA=" + totalConIVA + '\n' +
-        "}";
+    return String.format("Pedido{%nNumero=%d%n total=%.2f%n totalConIVA=%.2f%n}",
+                         numeroPedido, total, totalConIVA);
     }
 
     // Getters 
@@ -64,13 +61,14 @@ public class Pedido {
     }
 
     // Agregar un producto ya existente
-    public void addProducto(Producto producto) {
+    public int addProducto(Producto producto) {
         if (indice < productos.length) {
             productos[indice++] = producto;
             total += producto.getPrecio();
         } else {
-            System.out.println("No se pueden agregar más productos a este pedido.");
+            return 0;
         }
+        return 1;
     }
 
     public void verProductos() {

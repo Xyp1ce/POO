@@ -45,6 +45,4 @@ public class Cliente {
             System.out.println((i + 1) + " -> " + pedidos[i]);
         }
     }
-
-    
 }

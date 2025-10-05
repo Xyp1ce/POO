@@ -4,6 +4,7 @@ public class Pedido {
     private double total;
     private Producto[] productos;
     private int indice;
+    private static float IVA; 
 
     // Constructor
     public Pedido(String fecha, int numeroPedido) {
@@ -14,12 +15,19 @@ public class Pedido {
         indice = 0;
     }
 
+    static {
+        // IVA por defecto 16%
+        IVA = .16f;
+    }
+
     @Override
     public String toString() {
-        return "Pedido{" +
-                "Numero='" + numeroPedido + '\n' +
-                "total=" + total + '\n' +
-                "}";
+    double totalConIVA = total + (total * IVA);
+    return "Pedido{" +
+        "Numero=" + numeroPedido + '\n' +
+        "total=" + total + '\n' +
+        "total con IVA=" + totalConIVA + '\n' +
+        "}";
     }
 
     // Getters 
@@ -35,7 +43,18 @@ public class Pedido {
         return total;
     }
 
+    public static float getIVA() {
+        return IVA;
+    }
+
     // Setters
+    public static void setIVA(float nuevoIVA) {
+        if(nuevoIVA > 1) {
+            nuevoIVA = nuevoIVA/100; // convertimos a por ciento en caso de ser mayor a 1
+        }
+        IVA = nuevoIVA;
+    }
+
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }

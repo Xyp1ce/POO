@@ -43,7 +43,7 @@ public class Principal {
         int opc;
         do {
             System.out.println("Desea:\n" +
-                    "[1] Agregar producto   [2] Modificar producto   [3] Salir\n");
+                    "[1] Agregar producto   [2] Modificar producto   [3] Modificar IVA   [4] Salir\n");
             opc = sc.nextInt();
             sc.nextLine();
             switch (opc) {
@@ -53,14 +53,17 @@ public class Principal {
                 case 2: // Modificar producto
                     modificarProducto();
                     break;
-                case 3: // Salir
+                case 3: // Modificar IVA
+                    modificarIVA();
+                    break;
+                case 4: // Salir
                     System.out.println("Saliendo del modo administrador...");
                     break;
                 default:
                     System.out.println("Opcion invalida...");
                     break;
             }
-        } while (opc != 3);
+        } while (opc != 4);
     }
 
     public void cliente(Cliente cliente) {
@@ -154,6 +157,15 @@ public class Principal {
         } while (opc != 5);
     }
 
+    public void modificarIVA() {
+        float nuevoIVA;
+        System.out.println("Ingresa el nuevo valor de IVA ");
+        nuevoIVA = sc.nextFloat();
+        sc.nextLine();
+        Pedido.setIVA(nuevoIVA);
+        System.out.println("IVA actualizado a: " + Pedido.getIVA());
+    }
+
     // metodo para realizar un pedido y agregarlo al cliente
     public Pedido pedido(Cliente cliente) {
         int opc;
@@ -189,7 +201,7 @@ public class Principal {
             }
         } while (opc != 2);
         System.out.println("Saliendo...");
-        // Agregamos el pedido al cliente
+        // Agregamos el pedido al cliente (guardamos el objeto con sus productos)
         cliente.addPedido(fecha, noPedido);
         return pedido;
     }

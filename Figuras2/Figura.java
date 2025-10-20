@@ -1,4 +1,4 @@
-public class Figura {
+public abstract class Figura {
   protected String color;
   private String patron;
 
@@ -11,5 +11,16 @@ public class Figura {
 
   public String getPatron() {
     return patron;
+  }
+
+  public void setColor(String color) {
+    this.color = color;
+  }
+  
+  // Metodo abstracto 
+  abstract String dibuja();
+
+  public String toString() {
+    return "EL color es " + color + " y patron es " + patron;
   }
 }

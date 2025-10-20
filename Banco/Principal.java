@@ -4,8 +4,11 @@
  */
 
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.Random;
 
 public class Principal{
+  public Random rnd = new Random();
   public Scanner sc = new Scanner(System.in);
   public static void main(String[] args){
     Cuenta.setInteres(10.5f);
@@ -20,10 +23,15 @@ public class Principal{
     String nombre;
     Cuenta cuenta;
     do {
-      System.out.println("\n[1] Agregar Cliente     [5] Realizar transaccion\n" +
-                         "[2] Ver Clientes        [6] Cambiar interes\n" +
-                         "[3] Agregar Cuenta      [7] Ver Cuentas sucursal\n" +
-                         "[4] Ver Cuentas Cliente [8] Salir");
+      System.out.println("1. Agregar Cliente");
+      System.out.println("2. Ver Clientes");
+      System.out.println("3. Agregar Cuenta");
+      System.out.println("4. Ver Cuentas Cliente");
+      System.out.println("5. Realizar transaccion");
+      System.out.println("6. Cambiar interes");
+      System.out.println("7. Ver Cuentas Sucursal");
+      System.out.println("8. Ver Movimientos");
+      System.out.println("9. Salir");
       opc = Validacion.validInt("Ingresa una opcion: ");
       switch(opc) {
         case 1: // agregar Clientes
@@ -57,8 +65,10 @@ public class Principal{
           }
           System.out.println("Cuenta encontrada");
           do { // Escoger opcion
-            System.out.println("[1] Deposito [3] Seleccionar Cuenta\n" +
-                               "[2] Retiro   [4] Cancelar\n");
+            System.out.println("1. Deposito");
+            System.out.println("2. Retiro");
+            System.out.println("3. Seleccionar Cuenta");
+            System.out.println("4. Cancelar");
             opc = Validacion.validInt("Ingresa una opcion: ");
             sc.nextLine();
             switch(opc) {
@@ -89,7 +99,20 @@ public class Principal{
         case 7: // Ver cuentas sucursal 
           sucursal.watchAccounts();
           break;
-        case 8: // Salir
+        case 8: // Ver movimientos
+          cliente = buscarCliente(sucursal);
+          if(cliente == null){
+            System.out.println("Cancelando...");
+            break;
+          }
+          cuenta = buscarCuenta(cliente);
+          if(cuenta == null){
+            System.out.println("Cancelando...");
+            break;
+          }
+          System.out.println("Movimientos de la cuenta\n" + cuenta.getMovimientos());
+          break;
+        case 9: // Salir
           System.out.println("Finalizando programa...\n");
           break;
         default:
@@ -190,8 +213,11 @@ public class Principal{
     System.out.println("Ingresa la cantidad a depositar");
     float deposito = sc.nextFloat();
     sc.nextLine();
+    LocalDate today = LocalDate.now();
+    long referencia = rnd.nextLong(10000);
+    long folio = rnd.nextLong(1000);
     System.out.println("Saldo actual: " + cuenta.getSaldo());
-    if(cuenta.depositar(deposito) == 0) {
+    if(cuenta.depositar(deposito, "Deposito", referencia, deposito, today, folio) == 0) {
       System.out.println("Error. Deposito no exitoso");
     } else {
       System.out.println("Saldo actualizado: " + cuenta.getSaldo());
@@ -202,8 +228,11 @@ public class Principal{
     System.out.println("Ingresa la cantidad a retirar");
     float retiro = sc.nextFloat();
     sc.nextLine();
+    LocalDate today = LocalDate.now();
+    long referencia = rnd.nextLong(10000);
+    long folio = rnd.nextLong(1000);
     System.out.println("Saldo actual: " + cuenta.getSaldo());
-    if(cuenta.retirar(retiro) == 0) {
+    if(cuenta.retirar(retiro, "Retiro", referencia, retiro, today, folio) == 0) {
       System.out.println("Error. Retiro no exitoso");
     } else {
       System.out.println("Saldo actualizado: " + cuenta.getSaldo());

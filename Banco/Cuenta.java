@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class Cuenta{
 
   // Atributos
@@ -15,6 +17,9 @@ public class Cuenta{
   // se modifica en todos
   private static float interes;
 
+  private Movimiento[] movimientos;
+  private int cantMovimientos;
+
   // Constructor
   public Cuenta(long noCuenta, long clave, String fechaVencimiento, String tipo){
     this.noCuenta = noCuenta;
@@ -22,7 +27,20 @@ public class Cuenta{
     this.fechaVencimiento = fechaVencimiento;
     this.tipo = tipo;
 
+    movimientos = new Movimiento[10];
+    cantMovimientos = 0;
     saldo = 0;
+  }
+
+  public Cuenta(long noCuenta, long clave, String fechaVencimiento, String tipo, float saldo) {
+    this.noCuenta = noCuenta;
+    this.clave = clave;
+    this.fechaVencimiento = fechaVencimiento;
+    this.tipo = tipo;
+    this.saldo = saldo;
+
+    movimientos = new Movimiento[10];
+    cantMovimientos = 0;
   }
 
   @Override
@@ -62,17 +80,21 @@ public class Cuenta{
     // (los que estan situados hasta arriba)
     this.fechaVencimiento = fechaVencimiento;
   }
-  public float depositar(float deposito){
+  public float depositar(float deposito, String tipo, long referencia, float monto, LocalDate fecha, long folio){
     if(deposito <= 0) {
       return 0;
     }
+    Movimiento newMovimiento = new Movimiento(tipo, referencia, monto, fecha, folio);
+    movimientos[cantMovimientos++] = newMovimiento;
     return saldo+=deposito;
   }
 
-  public float retirar(float retiro){
+  public float retirar(float retiro, String tipo, long referencia, float monto, LocalDate fecha, long folio){
     if((saldo - retiro) < 0){
       return 0;
     } else{
+      Movimiento newMovimiento = new Movimiento(tipo, referencia, monto, fecha, folio);
+      movimientos[cantMovimientos++] = newMovimiento;
       return saldo-=retiro;
     }
   }
@@ -98,6 +120,14 @@ public class Cuenta{
 
   public void calcularIntereses() {
     saldo+=(saldo*interes)/100;
+  }
+
+  public String getMovimientos() {
+    String msg = "";
+    for(int i = 0; i < cantMovimientos; i++) {
+      msg = msg + movimientos[i].toString();
+    }
+    return msg;
   }
 
 }

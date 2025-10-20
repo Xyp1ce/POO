@@ -1,9 +1,9 @@
-public class Figura2D extends Figura { 
+public abstract class Figura2D extends Figura { 
 
   protected float area;
   protected float perimetro;
 
-  public Figuras2D() {
+  public Figura2D() {
     super();
   }
 
@@ -35,8 +35,8 @@ public class Figura2D extends Figura {
    * metodos existiran
    */
 
-  public void area() {}
-  public void primetro() {}
+  public abstract void area();
+  public abstract void primetro();
 
   public String toString() {
     // Llamamos al toString del padre

@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Validacion {
+public class ValidacionPoli {
   private static int valor;
 
   public static int validInt(String mensaje) {

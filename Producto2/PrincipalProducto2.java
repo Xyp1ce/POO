@@ -6,13 +6,13 @@ public class Principal {
     // Almacen almacen = new Almacen();
 
     public static void main(String[] args) {
-        Principal p = new Principal();
+        PrincipalPoli p = new PrincipalPoli();
         p.menu();
     }
 
     public void menu() {
         int opc = 0;
-        Cliente cliente = null;
+        ClientePoli cliente = null;
         while (true) {
             System.out.println("Bienvenido\n" +
                     "Ingresa como cliente o como administrador?\n" +
@@ -27,7 +27,7 @@ public class Principal {
                     String nombre = sc.nextLine();
                     System.out.println("Ingrese su direccion: ");
                     String direccion = sc.nextLine();
-                    cliente = new Cliente(nombre, direccion);
+                    cliente = new ClientePoli(nombre, direccion);
                 }
                 cliente(cliente);
             } else if (opc == 3) {
@@ -66,7 +66,7 @@ public class Principal {
         } while (opc != 4);
     }
 
-    public void cliente(Cliente cliente) {
+    public void cliente(ClientePoli cliente) {
         int opc;
         do {
             System.out.println("\nBienvenido " + cliente.getNombre() + "!!\n");
@@ -172,7 +172,7 @@ public class Principal {
     }
 
     // metodo para realizar un pedido y agregarlo al cliente
-    public Pedido pedido(Cliente cliente) {
+    public Pedido pedido(ClientePoli cliente) {
         int opc;
         int eleccion;
         int noPedido;

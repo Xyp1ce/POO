@@ -1,24 +1,24 @@
-public class Sucursal{
+public class SucursalPoli {
 
   // Atributos
   private String direccion;
   private int noSucursal;
 
   // relacion 
-  private Cliente[] clientes; 
-  private Cuenta[] accounts;
+  private ClientePoli[] clientes;
+  private CuentaPoli[] accounts;
   private int indice;
   private int indiceCuentas;
 
   // Constructor 
-  public Sucursal(String direccion, int noSucursal){
+  public SucursalPoli(String direccion, int noSucursal){
     this.direccion = direccion;
     this.noSucursal = noSucursal;
     // cada sucursal podra tener hasta 10 clientes
-    clientes = new Cliente[10];
+    clientes = new ClientePoli[10];
     // Como cada cliente puede tener hasta 10 cuentas
     // entonces la sucursal puede tener hasta 100 cuentas
-    accounts = new Cuenta[100];
+    accounts = new CuentaPoli[100];
     indice = 0;
     indiceCuentas = 0;
   }
@@ -33,7 +33,7 @@ public class Sucursal{
 
   // No hay sets, la direccion no se cambia ni el numero de sucursal
 
-  public Cliente buscarCliente(String nombre){
+  public ClientePoli buscarCliente(String nombre){
     if(indice == 0){
       return null; // no hay clientes
     }
@@ -46,7 +46,7 @@ public class Sucursal{
   }
 
   public void addCliente(String nombre, String direccion) {
-    clientes[indice++] = new Cliente((indice), nombre, direccion);
+    clientes[indice++] = new ClientePoli((indice), nombre, direccion);
   }
 
   public void getClientes() {
@@ -55,7 +55,7 @@ public class Sucursal{
     }
   }
 
-  public void addAccount(Cuenta account) {
+  public void addAccount(CuentaPoli account) {
     accounts[indiceCuentas++] = account;
   }
 

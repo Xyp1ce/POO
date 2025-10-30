@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Cuenta implements Intereses{
+public class CuentaPoli implements Intereses{
 
   // Atributos
   private long noCuenta;
@@ -8,7 +8,7 @@ public class Cuenta implements Intereses{
   private long clave;
   private String fechaVencimiento;
   private String tipo;
-  private Cliente client;
+  private ClientePoli client;
 
   // Los metodos static se diferencian en que:
   // el valor se cambia para todos los objetos que existan de esta clase 
@@ -17,29 +17,29 @@ public class Cuenta implements Intereses{
   // se modifica en todos
   private static float interes;
 
-  private Operacion[] operaciones;
+  private OperacionPoli[] operaciones;
   private int cantOperaciones;
 
   // Constructor
-  public Cuenta(long noCuenta, long clave, String fechaVencimiento, String tipo){
+  public CuentaPoli(long noCuenta, long clave, String fechaVencimiento, String tipo){
     this.noCuenta = noCuenta;
     this.clave = clave;
     this.fechaVencimiento = fechaVencimiento;
     this.tipo = tipo;
 
-    operaciones = new Operacion[10];
+    operaciones = new OperacionPoli[10];
     cantOperaciones = 0;
     saldo = 0;
   }
 
-  public Cuenta(long noCuenta, long clave, String fechaVencimiento, String tipo, float saldo) {
+  public CuentaPoli(long noCuenta, long clave, String fechaVencimiento, String tipo, float saldo) {
     this.noCuenta = noCuenta;
     this.clave = clave;
     this.fechaVencimiento = fechaVencimiento;
     this.tipo = tipo;
     this.saldo = saldo;
 
-    operaciones = new Movimiento[10];
+    operaciones = new MovimientoPoli[10];
     cantOperaciones = 0;
   }
 
@@ -74,7 +74,7 @@ public class Cuenta implements Intereses{
     return tipo;
   }
 
-  public void setClient(Cliente client) {
+  public void setClient(ClientePoli client) {
     this.client = client;
   }
 
@@ -89,7 +89,7 @@ public class Cuenta implements Intereses{
     if(deposito <= 0) {
       return 0;
     }
-    Operacion newMovimiento = new Movimiento(tipo, referencia, monto, fecha, folio);
+    OperacionPoli newMovimiento = new MovimientoPoli(tipo, referencia, monto, fecha, folio);
     operaciones[cantOperaciones++] = newMovimiento;
     return saldo+=deposito;
   }
@@ -98,7 +98,7 @@ public class Cuenta implements Intereses{
     if((saldo - retiro) < 0){
       return 0;
     } else{
-      Operacion newMovimiento = new Movimiento(tipo, referencia, monto, fecha, folio);
+      OperacionPoli newMovimiento = new MovimientoPoli(tipo, referencia, monto, fecha, folio);
       operaciones[cantOperaciones++] = newMovimiento;
       return saldo-=retiro;
     }

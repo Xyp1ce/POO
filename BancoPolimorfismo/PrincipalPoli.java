@@ -3,14 +3,12 @@
  * Cuenta con polimorfismo practica 8
  */
 
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
 public class PrincipalPoli {
 
-    public Scanner sc = new Scanner(System.in);
     public Random rnd = new Random();
 
     public static void main(String[] args){
@@ -26,7 +24,6 @@ public class PrincipalPoli {
 
         // Declaracion de variables a utilizar (se puede optimizar)
         ClientePoli cliente;
-        String nombre;
         CuentaPoli cuenta;
 
         String msgMenu = "Bienvenido a la sucursal de " + sucursal.getDireccion() + "\n" +
@@ -122,6 +119,7 @@ public class PrincipalPoli {
                                     }
                                     break;
                                 case 4: // Prestamo
+                                    solicitarPrestamo(cuenta);
                                     break;
                                 case 5: // Cambiar de cuenta
                                     CuentaPoli aux;
@@ -175,15 +173,6 @@ public class PrincipalPoli {
                     break;
             }
         } while(true);
-    }
-
-    public SucursalPoli crearSucursal() {
-        System.out.println("Ingresa el numero de la sucursal");
-        int noSucursal = sc.nextInt();
-        sc.nextLine();
-        System.out.println("Ingresa la direccion de la sucursal");
-        String direccion = sc.nextLine();
-        return new SucursalPoli(direccion, noSucursal);
     }
 
     public void crearCliente(SucursalPoli sucursal) {
@@ -295,5 +284,25 @@ public class PrincipalPoli {
         float interes = ValidacionPoli.validFloat("Ingresa el nuevo interes");
         CuentaPoli.setInteres(interes);
         JOptionPane.showMessageDialog(null, "Interes actualizado: " + CuentaPoli.getInteres());
+    }
+
+    public void solicitarPrestamo(CuentaPoli cuenta) {
+        float cantidad = ValidacionPoli.validFloat("Ingresa la cantidad del préstamo");
+        LocalDate today = LocalDate.now();
+        long folio = rnd.nextLong(1000);
+        
+        JOptionPane.showMessageDialog(null, "Saldo actual: " + cuenta.getSaldo());
+        float intereses = cuenta.solicitarPrestamo(cantidad, today, folio);
+        
+        if (intereses == 0) {
+            JOptionPane.showMessageDialog(null, "Error, Préstamo no exitoso");
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Préstamo exitoso\n" +
+                "Cantidad prestada: " + cantidad + "\n" +
+                "Intereses: " + intereses + "\n" +
+                "Total a pagar: " + (cantidad + intereses) + "\n" +
+                "Saldo actualizado: " + cuenta.getSaldo());
+        }
     }
 }

@@ -136,4 +136,21 @@ public class CuentaPoli implements Intereses{
         }
         return msg;
     }
+
+    // Método para solicitar un préstamo
+    public float solicitarPrestamo(float cantidad, LocalDate fecha, long folio) {
+        if (cantidad <= 0) {
+            return 0;
+        }
+        // Crear un nuevo préstamo
+        Prestamo prestamo = new Prestamo(cantidad, fecha.toString());
+        // Calcular los intereses del préstamo
+        prestamo.calculaIntereses();
+        // Registrar la operación
+        OperacionPoli newOperacion = new MovimientoPoli("Prestamo", folio, cantidad, fecha, folio);
+        operaciones[cantOperaciones++] = newOperacion;
+        // Actualizar el saldo con el préstamo más los intereses
+        saldo += cantidad;
+        return prestamo.calculaInteres();
+    }
 }

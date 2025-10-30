@@ -24,7 +24,9 @@ public class ClientePoli {
 
     @Override
     public String toString() {
-        return "Nombre: " + nombre + "\nDireccion: " + direccion + "\nNo. Cliente " + noCliente;
+        return  "Nombre: " + nombre +
+                "\nDireccion: " + direccion +
+                "\nNo. Cliente " + noCliente;
     }
 
     // get/sets
@@ -48,11 +50,13 @@ public class ClientePoli {
         cuentas[indice++] = account;
     }
 
-    public void verCuentas() { // Impresion de todas las cuentas de un cliente
+    public String verCuentas() { // Concatenacion de todas las cuentas de un cliente
+        String msgCuentas = "";
         for(int i = 0; i < indice; i++) {
-            // Llamamos al toString de Cuenta
-            System.out.println(cuentas[i]);
+            msgCuentas += cuentas[i].toString();
+            msgCuentas += "\n";
         }
+        return msgCuentas;
     }
 
     public CuentaPoli buscarCuenta(long noCuenta) {

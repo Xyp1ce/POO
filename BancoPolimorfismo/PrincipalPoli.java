@@ -1,16 +1,20 @@
 /* Ramon Manriquez Guerrero
- * 15/09/2025
- * Empleado junto con Cuenta y Banco
+ * 29/10/2025
+ * Cuenta con polimorfismo practica 8
  */
 
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class PrincipalPoli {
-    public Random rnd = new Random();
+
     public Scanner sc = new Scanner(System.in);
+    public Random rnd = new Random();
+
     public static void main(String[] args){
+        // Setear el interes para los prestamos
         CuentaPoli.setInteres(10.5f);
         PrincipalPoli p = new PrincipalPoli();
         p.menu();
@@ -19,20 +23,33 @@ public class PrincipalPoli {
     public void menu() {
         int opc;
         SucursalPoli sucursal = new SucursalPoli("Zona Rio", 123);
+
+        // Declaracion de variables a utilizar (se puede optimizar)
         ClientePoli cliente;
         String nombre;
         CuentaPoli cuenta;
+
+        String msgMenu = "Bienvenido a la sucursal de " + sucursal.getDireccion() + "\n" +
+                "Elija una opcion:" + "\n" +
+                "1. Agregar Cliente"+ "\n" +
+                "2. Ver Clientes" + "\n" +
+                "3. Agregar Cuenta" + "\n" +
+                "4. Ver Cuentas Cliente" + "\n" +
+                "5. Realizar transaccion" + "\n" +
+                "6. Cambiar interes" + "\n" +
+                "7. Ver Cuentas Sucursal" + "\n" +
+                "8. Ver Movimientos" + "\n" +
+                "9. Salir" + "\n";
+
+        String msgTransaccion = "1. Deposito" + "\n" +
+                                "2. Retiro" + "\n" +
+                                "3. Transferencia" + "\n" +
+                                "4. Prestamo" + "\n" +
+                                "5. Cambiar de cuenta" + "\n" +
+                                "6. Salir" + "\n";
         do {
-            System.out.println("1. Agregar Cliente");
-            System.out.println("2. Ver Clientes");
-            System.out.println("3. Agregar Cuenta");
-            System.out.println("4. Ver Cuentas Cliente");
-            System.out.println("5. Realizar transaccion");
-            System.out.println("6. Cambiar interes");
-            System.out.println("7. Ver Cuentas Sucursal");
-            System.out.println("8. Ver Movimientos");
-            System.out.println("9. Salir");
-            opc = ValidacionPoli.validInt("Ingresa una opcion: ");
+            // Pedir y Validar dato
+            opc = ValidacionPoli.validInt(msgMenu, 1, 9);
             switch(opc) {
                 case 1: // agregar Clientes
                     if(sucursal.getCantidad() == 9) {
@@ -42,84 +59,122 @@ public class PrincipalPoli {
                     }
                     break;
                 case 2: // ver Clientes
-                    sucursal.getClientes();
+                    if(sucursal.getCantidad() > 0)
+                        JOptionPane.showMessageDialog(null, sucursal.getClientes());
+                    else
+                        JOptionPane.showMessageDialog(null, "No hay clientes registrados...");
                     break;
                 case 3: // Agregar Cuenta
-                    crearCuenta(sucursal);
+                    cliente = buscarCliente(sucursal);
+                    if(cliente != null) {
+                        CuentaPoli account;
+                        account = crearCuenta(sucursal);
+                        //Agregamos la cuenta al cliente y a la sucursal
+                        cliente.addAccount(account);
+                        sucursal.addAccount(account);
+                        //Relacionamos el cliente a la cuenta
+                        account.setClient(cliente);
+                    }
                     break;
                 case 4: // Ver Cuentas Clientes
                     cliente = buscarCliente(sucursal);
-                    cliente.verCuentas();
+                    if(cliente != null)
+                        JOptionPane.showMessageDialog(null, cliente.verCuentas());
                     break;
                 case 5: // Transaccion
-                    cliente = buscarCliente(sucursal);
-                    if(cliente == null) {
-                        System.out.println("Cancelando...\n");
-                        break;
-                    }
-                    System.out.println("Cliente encontrado");
-                    cuenta = buscarCuenta(cliente);
-                    if(cuenta == null) {
-                        System.out.println("Cancelando...\n");
-                        break;
-                    }
-                    System.out.println("Cuenta encontrada");
-                    do { // Escoger opcion
-                        System.out.println("1. Deposito");
-                        System.out.println("2. Retiro");
-                        System.out.println("3. Seleccionar Cuenta");
-                        System.out.println("4. Cancelar");
-                        opc = ValidacionPoli.validInt("Ingresa una opcion: ");
-                        sc.nextLine();
-                        switch(opc) {
-                            case 1: // Deposito
-                                deposito(cuenta);
-                                break;
-                            case 2: // Retiro
-                                retiro(cuenta);
-                                break;
-                            case 3: // Seleccionar cuentas
-                                CuentaPoli aux;
-                                aux = buscarCuenta(cliente);
-                                if(aux != null)
-                                    cuenta = aux;
-                                break;
-                            case 4: // Cancelar
-                                System.out.println("Cancelando...\n");
-                                break;
-                            default:
-                                System.out.println("Opcion invalida...");
-                                break;
-                        }
-                    } while(opc != 4);
+                    if (sucursal.getCantidad() > 0) {
+                        cliente = buscarCliente(sucursal);
+                        if(cliente == null)
+                            break;
+                        cuenta = buscarCuenta(cliente);
+                        if(cuenta == null)
+                            break;
+                        do { // Escoger opcion
+                            opc = ValidacionPoli.validInt(msgTransaccion, 1 , 6);
+                            switch(opc) {
+                                case 1: // Deposito
+                                    deposito(cuenta);
+                                    break;
+                                case 2: // Retiro
+                                    retiro(cuenta);
+                                    break;
+                                case 3: // Transferencia
+                                    // Tiene que haber mas de una cuenta registrada para hacer una transferencia
+                                    if(sucursal.getCantidadCuentas() > 1) {
+                                        ClientePoli clienteDest;
+                                        clienteDest = buscarCliente(sucursal);
+                                        if(clienteDest != null) {
+                                            CuentaPoli cuentaDest;
+                                            cuentaDest = buscarCuenta(clienteDest);
+                                            if(cuentaDest != null) {
+                                                transferencia(cuenta, cuentaDest);
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Operacion cancelada...");
+                                                break;
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Operacion cancelada...");
+                                            break;
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "No hay cuentas suficientes para hacer" +
+                                                                            "una tranferencia");
+                                    }
+                                    break;
+                                case 4: // Prestamo
+                                    break;
+                                case 5: // Cambiar de cuenta
+                                    CuentaPoli aux;
+                                    aux = buscarCuenta(cliente);
+                                    if(aux != null)
+                                        cuenta = aux;
+                                    break;
+                                case 6: // Salir
+                                    System.out.println("Cancelando...\n");
+                                    break;
+                                default:
+                                    System.out.println("Opcion invalida...");
+                                    break;
+                            }
+                        } while(opc != 6);
+                    } else
+                        JOptionPane.showMessageDialog(null, "No hay cuentas registradas en la sucursal");
+
                     break;
                 case 6: // Cambiar interes
                     cambiarInteres();
                     break;
                 case 7: // Ver cuentas sucursal
-                    sucursal.watchAccounts();
+                    if(sucursal.getCantidadCuentas() > 0)
+                        JOptionPane.showMessageDialog(null, sucursal.watchAccounts());
+                    else
+                        JOptionPane.showMessageDialog(null, "No hay cuentas registradas en la sucursal");
                     break;
                 case 8: // Ver movimientos
-                    cliente = buscarCliente(sucursal);
-                    if(cliente == null){
-                        System.out.println("Cancelando...");
-                        break;
+                    if (sucursal.getCantidad() > 0) {
+                        cliente = buscarCliente(sucursal);
+                        if(cliente == null){
+                            JOptionPane.showMessageDialog(null, "Cancelando...");
+                            break;
+                        }
+                        cuenta = buscarCuenta(cliente);
+                        if(cuenta == null){
+                            JOptionPane.showMessageDialog(null, "Cancelando...");
+                            break;
+                        }
+                        JOptionPane.showMessageDialog(null, "Movimientos de la cuenta " + cuenta.getMovimientos());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay cuentas registradas en la sucursal");
                     }
-                    cuenta = buscarCuenta(cliente);
-                    if(cuenta == null){
-                        System.out.println("Cancelando...");
-                        break;
-                    }
-                    System.out.println("Movimientos de la cuenta\n" + cuenta.getMovimientos());
                     break;
                 case 9: // Salir
                     System.out.println("Finalizando programa...\n");
-                    break;
+                    System.exit(0);
                 default:
                     System.out.println("Opcion Invalida...\n");
                     break;
             }
-        } while(opc != 8);
+        } while(true);
     }
 
     public SucursalPoli crearSucursal() {
@@ -132,119 +187,113 @@ public class PrincipalPoli {
     }
 
     public void crearCliente(SucursalPoli sucursal) {
-        System.out.println("Ingresa el nombre del cliente");
-        String nombre = sc.nextLine();
-        System.out.println("Ingresa la direccion del cliente");
-        String direccion = sc.nextLine();
+        // Pedir informacion del cliente
+        String nombre = JOptionPane.showInputDialog(null, "Ingresa el nombre del cliente");
+        String direccion = JOptionPane.showInputDialog(null, "Ingresa la direccion del cliente");
+        // .addCliente crea un objeto tipo ClientePoli dentro de si y lo agrega a su arreglo de clientes
         sucursal.addCliente(nombre, direccion);
     }
 
-    public void crearCuenta(SucursalPoli sucursal) {
-        ClientePoli cliente = buscarCliente(sucursal);
-        if(cliente != null) { // Si existe el cliente
-            System.out.println("\nCliente encontrado");
-            System.out.println("Ingresa el numero de cuenta");
-            long noCuenta = sc.nextLong();
-            sc.nextLine();
-            System.out.println("Ingresa su CLABE");
-            long clave = sc.nextLong();
-            sc.nextLine();
-            System.out.println("Ingresa la fecha de vencimiento (MM/AA)");
-            String fechaVencimiento = sc.nextLine();
-            System.out.println("Ingresa el tipo de la cuenta");
-            String tipo = sc.nextLine();
+    public CuentaPoli crearCuenta(SucursalPoli sucursal) {
+        // Pedimos los datos de la cuenta
+        String noCuentaS = JOptionPane.showInputDialog(null, "Ingresa el numero de cuenta");
+        long noCuenta = Long.parseLong(noCuentaS);
 
-            // Creamos un objeto Cuenta
-            CuentaPoli account = new CuentaPoli(noCuenta, clave, fechaVencimiento, tipo);
-            // Agregamos la cuenta al cliente y a la sucursal
-            cliente.addAccount(account);
-            sucursal.addAccount(account);
-            // Relacionamos el cliente a la cuenta
-            account.setClient(cliente);
+        String claveS= JOptionPane.showInputDialog(null, "Ingresa su CLABE");
+        long clave= Long.parseLong(claveS);
 
-        } else {
-            System.out.println("No se encontro ningun cliente con ese nombre");
-        }
+        String fechaVencimiento = JOptionPane.showInputDialog(null, "Ingresa la fecha de vencimiento (MM/AA)");
+
+        String tipo = JOptionPane.showInputDialog(null, "Ingresa el tipo de la cuenta");
+
+        // Creamos un objeto Cuenta
+        CuentaPoli account = new CuentaPoli(noCuenta, clave, fechaVencimiento, tipo);
+        // retornamos la cuenta para agregarla en el cliente
+        return account;
     }
 
     public ClientePoli buscarCliente(SucursalPoli sucursal) {
         ClientePoli cliente;
         int opc = 2;
         do {
-            System.out.println("Ingresa el nombre del Cliente");
-            String nombre = sc.nextLine();
+            String nombre = JOptionPane.showInputDialog(null, "Ingresa el nombre del cliente");
             cliente = sucursal.buscarCliente(nombre);
+            opc = 2;
             if(cliente == null){
-                System.out.println("Cliente no encontrado");
-                System.out.println("Quiere continuar? [1] Si [2] No");
-                opc = sc.nextInt();
-                sc.nextLine();
+                JOptionPane.showMessageDialog(null, "Cliente no encontrado");
+                String msg = "Continuar? [1] SI [2] NO";
+                opc = ValidacionPoli.validInt(msg, 1, 2);
             }
         } while(opc == 1);
-        if(opc == 2 && cliente != null)
+        if(cliente != null)
             return cliente;
-        else
-            return null;
+        return null;
     }
 
     public CuentaPoli buscarCuenta(ClientePoli cliente) {
         CuentaPoli cuenta;
         int opc = 2;
         do { // Buscar la cuenta del cliente
-            cliente.verCuentas();
-            System.out.println("Ingresa el No. de Cuenta");
-            long noCuenta = sc.nextLong();
-            sc.nextLine();
+            String msg = cliente.verCuentas();
+            long noCuenta = ValidacionPoli.validLong(msg + "Ingresa el No. de Cuenta");
             cuenta = cliente.buscarCuenta(noCuenta);
             if(cuenta == null){
-                System.out.println("Cuenta no encontrada");
-                System.out.println("Quiere continuar? [1] Si [2] No");
-                opc = sc.nextInt();
-                sc.nextLine();
+                JOptionPane.showMessageDialog(null, "Cuenta no encontrada");
+                String msgContinuar = "Continuar? [1] SI [2] NO";
+                opc = ValidacionPoli.validInt(msgContinuar, 1, 2);
             }
         } while(opc == 1);
         if(cuenta != null)
             return cuenta;
-        else
-            return null;
+        return null;
     }
 
     public void deposito(CuentaPoli cuenta){
-        System.out.println("Ingresa la cantidad a depositar");
-        float deposito = sc.nextFloat();
-        sc.nextLine();
+        float deposito = ValidacionPoli.validFloat("Ingresa la cantidad a depositar");
+        // Generar la fecha actual
         LocalDate today = LocalDate.now();
+        // Generar numero aleatorios para el folio y referencia
         long referencia = rnd.nextLong(10000);
         long folio = rnd.nextLong(1000);
-        System.out.println("Saldo actual: " + cuenta.getSaldo());
+        JOptionPane.showMessageDialog(null, "Saldo actual: " + cuenta.getSaldo());
         if(cuenta.depositar(deposito, "Deposito", referencia, deposito, today, folio) == 0) {
-            System.out.println("Error. Deposito no exitoso");
+            JOptionPane.showMessageDialog(null, "Error, Deposito no exitoso");
         } else {
-            System.out.println("Saldo actualizado: " + cuenta.getSaldo());
+            JOptionPane.showMessageDialog(null, "Saldo actualizado: " + cuenta.getSaldo());
         }
     }
 
     public void retiro(CuentaPoli cuenta) {
-        System.out.println("Ingresa la cantidad a retirar");
-        float retiro = sc.nextFloat();
-        sc.nextLine();
+        float retiro = ValidacionPoli.validFloat("Ingresa la cantidad a retirar");
         LocalDate today = LocalDate.now();
         long referencia = rnd.nextLong(10000);
         long folio = rnd.nextLong(1000);
-        System.out.println("Saldo actual: " + cuenta.getSaldo());
+        JOptionPane.showMessageDialog(null, "Saldo actual: " + cuenta.getSaldo());
         if(cuenta.retirar(retiro, "Retiro", referencia, retiro, today, folio) == 0) {
-            System.out.println("Error. Retiro no exitoso");
+            JOptionPane.showMessageDialog(null, "Error, Retiro no exitoso");
         } else {
-            System.out.println("Saldo actualizado: " + cuenta.getSaldo());
+            JOptionPane.showMessageDialog(null, "Saldo actualizado: " + cuenta.getSaldo());
+        }
+    }
+
+    public void transferencia(CuentaPoli cuentaOrig, CuentaPoli cuentaDest) {
+        float monto = ValidacionPoli.validFloat("Ingresa la cantidad a transferir");
+        LocalDate today = LocalDate.now();
+        long referencia = rnd.nextLong(10000);
+        long folio = rnd.nextLong(1000);
+        JOptionPane.showMessageDialog(null, "Saldo actual: " + cuentaOrig.getSaldo());
+        if(cuentaOrig.transferencia(referencia, monto, today, folio) == 0) {
+            JOptionPane.showMessageDialog(null, "Error, Transferencia no exitosa");
+        } else {
+            JOptionPane.showMessageDialog(null, "Saldo actualizado: " + cuentaOrig.getSaldo());
+            cuentaDest.recibirTransferencia(monto);
         }
     }
 
     public void cambiarInteres() {
-        System.out.println("Interes actual: " + CuentaPoli.getInteres());
-        System.out.println("Ingrese el nuevo interes: ");
-        float interes = sc.nextFloat();
-        sc.nextLine();
+        JOptionPane.showMessageDialog(null, "Interes actual: " + CuentaPoli.getInteres());
+        float interes = ValidacionPoli.validFloat("Ingresa el nuevo interes");
         CuentaPoli.setInteres(interes);
-        System.out.println("Interes actualizado: " + CuentaPoli.getInteres());
+        JOptionPane.showMessageDialog(null, "Interes actualizado: " + CuentaPoli.getInteres());
     }
 }

@@ -1,13 +1,13 @@
 import java.time.LocalDate;
 
-public abstract class Operacion {
+public abstract class OperacionPoli{
   protected float monto;
   private LocalDate fecha;
   private long folio;
 
-  public Operacion(){ }
+  public OperacionPoli(){ }
 
-  public Operacion(float monto, LocalDate fecha, long folio) {
+  public OperacionPoli(float monto, LocalDate fecha, long folio) {
     this.monto = monto;
     this.fecha = fecha;
     this.folio = folio;
